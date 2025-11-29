@@ -15,6 +15,7 @@ const resetButton = document.getElementById('resetLevel');
 const nextButton = document.getElementById('nextLevel');
 const prevButton = document.getElementById('prevLevel');
 const startButton = document.getElementById('startButton');
+const escapeButton = document.getElementById('escapeButton');
 
 let currentLevelIndex = 0;
 let levels = [];
@@ -142,6 +143,15 @@ function createInsertLevel() {
     setMode(modeBadge, mode);
   }
 
+  function exitInsertMode() {
+    if (mode === 'insert') {
+      mode = 'normal';
+      updateBuffer();
+      addLog('ノーマルモードに戻りました。');
+      if (buffer === targetText) finish();
+    }
+  }
+
   function finish() {
     completed = true;
     addLog('Esc でノーマルモードに戻りました！保存コマンドに進みましょう。');
@@ -179,10 +189,7 @@ function createInsertLevel() {
 
       if (mode === 'insert') {
         if (key === 'Escape') {
-          mode = 'normal';
-          updateBuffer();
-          addLog('ノーマルモードに戻りました。');
-          if (buffer === targetText) finish();
+          exitInsertMode();
           return;
         }
         if (key.length === 1 && !event.metaKey && !event.ctrlKey) {
@@ -198,6 +205,9 @@ function createInsertLevel() {
     },
     get completed() {
       return completed;
+    },
+    onEscape() {
+      exitInsertMode();
     }
   };
 }
@@ -274,8 +284,28 @@ function createCommandLevel() {
         addLog(`${trimmed} はこのステージでは無効です。:wq を使いましょう。`);
       }
       closeCommandLine();
+    },
+    onEscape() {
+      if (!commandLine.hidden) {
+        closeCommandLine();
+        addLog('Esc: コマンドラインを閉じました。');
+      }
     }
   };
+}
+
+function handleEscapeAction() {
+  const level = levels[currentLevelIndex];
+  if (!level) return;
+  if (!commandLine.hidden) {
+    commandLine.hidden = true;
+    commandInput.blur();
+    addLog('Esc: コマンドラインを閉じました。');
+    return;
+  }
+  if (typeof level.onEscape === 'function') {
+    level.onEscape();
+  }
 }
 
 function setupGame() {
@@ -315,10 +345,11 @@ commandInput.addEventListener('keydown', (event) => {
     }
   }
   if (event.key === 'Escape') {
-    commandLine.hidden = true;
-    commandInput.blur();
+    event.preventDefault();
+    handleEscapeAction();
   }
 });
 
+escapeButton?.addEventListener('click', handleEscapeAction);
 window.addEventListener('keydown', handleKeyDown);
 window.addEventListener('DOMContentLoaded', setupGame);
