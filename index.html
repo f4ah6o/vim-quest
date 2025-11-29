@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vim Quest - Rogue-like Vim Trainer</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="hero">
+    <div class="hero__content">
+      <p class="eyebrow">Vim Quest</p>
+      <h1>ダンジョン探索でVimを覚えるシングルページゲーム</h1>
+      <p class="lede">ロールプレイング型の課題をこなしながら、h j k l 移動から :wq までの基本操作を段階的に習得できます。</p>
+      <div class="cta-row">
+        <button id="startButton" class="button primary">ゲームを始める</button>
+        <a class="button ghost" href="#levels">チュートリアルを見る</a>
+      </div>
+    </div>
+    <div class="hero__art" aria-hidden="true">
+      <div class="orb" style="--d:12s; --size:240px"></div>
+      <div class="orb" style="--d:18s; --size:320px"></div>
+      <div class="orb" style="--d:24s; --size:180px"></div>
+    </div>
+  </header>
+
+  <main>
+    <section id="levels" class="layout">
+      <div class="panel">
+        <div class="panel__header">
+          <div>
+            <p class="eyebrow" id="level-genre">Roguelike</p>
+            <h2 id="level-title">ステージを選択</h2>
+          </div>
+          <div class="progress">
+            <div class="progress__bar">
+              <div class="progress__fill" id="progressFill"></div>
+            </div>
+            <span id="progressLabel">0 / 3</span>
+          </div>
+        </div>
+        <p id="level-objective" class="objective">Vimの基本操作をゲーム形式で覚えましょう。</p>
+
+        <div class="game-area">
+          <div id="grid" class="grid" aria-live="polite"></div>
+          <div id="editor" class="editor" aria-live="polite" hidden>
+            <div class="editor__meta">
+              <span id="editor-mode" class="badge">NORMAL</span>
+              <span class="badge">模擬バッファ</span>
+            </div>
+            <pre id="editor-buffer" class="editor__buffer">Press i to insert</pre>
+            <div id="command-line" class="command-line" hidden>
+              :<input id="command-input" type="text" autocomplete="off" spellcheck="false" aria-label=":で始まるコマンドを入力" />
+            </div>
+          </div>
+          <div class="log" id="log" aria-live="polite"></div>
+        </div>
+
+        <div class="level-footer">
+          <div class="level-nav">
+            <button id="prevLevel" class="button ghost" aria-label="前のステージ">◀</button>
+            <button id="nextLevel" class="button ghost" aria-label="次のステージ">▶</button>
+          </div>
+          <div class="cta-row">
+            <button id="resetLevel" class="button">やり直す</button>
+            <button id="completeButton" class="button success" hidden>クリア！次へ進む</button>
+          </div>
+        </div>
+      </div>
+      <aside class="card">
+        <h3>進め方</h3>
+        <ol class="steps">
+          <li>ゲームエリアをクリックしてキー入力を有効化します。</li>
+          <li>各ステージの指示に沿って Vim 操作を入力します。</li>
+          <li>全クリアで GitHub Pages にそのまま配置可能な SPA です。</li>
+        </ol>
+        <div class="tip">
+          <p class="eyebrow">ジャンル</p>
+          <p>ステージはダンジョン探索 RPG をモチーフにしており、移動・挿入・保存の順に習得できます。</p>
+        </div>
+      </aside>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>Vim Quest - GitHub Pages 向けスタティック SPA</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
